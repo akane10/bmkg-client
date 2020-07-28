@@ -77,6 +77,16 @@
       </div>
     </section>
 
+    <script>
+      navigator.serviceWorker
+        .register('service-worker.js', { scope: '/' })
+        .then(function (registration) {
+          console.log('Service worker registered successfully');
+        })
+        .catch(function (e) {
+          console.error('Error during service worker registration:', e);
+        });
+    </script>
     <script src="main.js"></script>
   </body>
 </html>
