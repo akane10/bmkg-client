@@ -1,0 +1,16 @@
+{
+  "name": "Gempa",
+  "short_name": "Gempa",
+  "display": "standalone",
+  "background_color": "#FFFF00",
+  "theme_color": "#FFFF00",
+  "description": "Gempa",
+  "start_url": "https://gempa.yapie.me",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

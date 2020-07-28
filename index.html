@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="manifest.json" />
+
+    <title>Hello There!</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body class="has-background-dark" style="min-height: 100vh;">
+    <section class="section">
+      <div class="container">
+        <h1 class="title has-text-warning has-text-centered">
+          Hello There
+        </h1>
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="card has-background-warning">
+              <div class="card-content">
+                <p class="title has-text-centered">
+                  Gempabumi M5.0+ Terkini
+                </p>
+              </div>
+
+              <div id="autogempa"></div>
+
+              <!-- <div class="has-text-centered">
+                Tanggal: 27-Jul-20
+              </div>
+              <div class="has-text-centered">Jam: 05:01:23 WIB</div> -->
+
+              <footer class="card-footer"></footer>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card has-background-warning">
+              <div class="card-content">
+                <p class="title has-text-centered">
+                  60 Gempabumi M5.0+
+                </p>
+              </div>
+
+              <div id="gempaterkini"></div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card has-background-warning">
+              <div class="card-content">
+                <p class="title has-text-centered">
+                  20 Gempabumi Dirasakan
+                </p>
+              </div>
+
+              <div id="gempadirasakan"></div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card has-background-warning">
+              <div class="card-content">
+                <p class="title has-text-centered">
+                  Gempabumi Berpotensi Tsunami Terkini
+                </p>
+              </div>
+
+              <div id="lasttsunami"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="main.js"></script>
+  </body>
+</html>
