@@ -79,7 +79,16 @@ const setWilayah = (obj) => {
 };
 
 const setKeys = (obj) => {
-  const keys = ['Tanggal', 'Jam', 'Magnitude', 'Potensi', 'Area', 'Wilayah'];
+  const keys = [
+    'Tanggal',
+    'Jam',
+    'Magnitude',
+    'Potensi',
+    'Area',
+    'Wilayah',
+    'Keterangan',
+    'Dirasakan',
+  ];
 
   return Object.entries(obj).reduce((acc, [key, value]) => {
     if (keys.includes(key) || key.includes('Wilayah')) {
