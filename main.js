@@ -21,7 +21,7 @@ const take = (num) => (arr) => arr.slice(0, num);
 const join = (str) => (arr) => arr.join(str);
 const addPadding = (arr) =>
   arr.map((i) => `<div style="padding-bottom:20px">${i}</div>`);
-const takeTwo = take(2);
+const takeThree = take(3);
 const afterTakeTwo = trace('after take 2');
 const beforeTakeTwo = trace('before take 2');
 
@@ -37,15 +37,23 @@ async function getData(path) {
   }
 }
 
+function handleValueArray(value) {
+  if (Array.isArray(value)) {
+    return value.map((i) => `<div> ${i} </div>`).join('');
+  } else {
+    return value;
+  }
+}
+
 const objToHtmlString = (obj) =>
   Object.entries(obj).map(
     ([key, value]) => `
     <div class="has-text-centered"> 
-      <div class="title is-size-6" style="margin-bottom:0">
+      <div class="title is-size-5" style="margin-bottom:0">
         ${key}
       </div>
       <div>
-        ${value} 
+        ${handleValueArray(value)} 
       </div>
     </div>
     `
@@ -54,6 +62,30 @@ const objToHtmlString = (obj) =>
 const toObject = (acc, [key, value]) => {
   acc[key] = value;
   acc;
+};
+
+const setWilayah = (obj) => {
+  const values = Object.entries(obj).reduce((acc, [key, value]) => {
+    if (key.includes('Wilayah')) {
+      acc.push(value);
+    }
+    return acc;
+  }, []);
+
+  const objWithoutWilayah = Object.entries(obj).reduce((acc, [key, value]) => {
+    if (key.includes('Wilayah')) {
+      return acc;
+    } else {
+      acc[key] = value;
+      return acc;
+    }
+  }, {});
+
+  if (values.length > 0) {
+    objWithoutWilayah.Wilayah = values;
+  }
+
+  return { ...objWithoutWilayah };
 };
 
 const setKeys = (obj) => {
@@ -70,14 +102,17 @@ const setKeys = (obj) => {
 async function gempa(path) {
   const { data } = await getData(path);
 
-  return data.map(setKeys).map(compose(join(''), objToHtmlString));
+  return data
+    .map(setKeys)
+    .map(setWilayah)
+    .map(compose(join(''), objToHtmlString));
 }
 
 gempa('autogempa').then(compose(render(autogempa), addPadding));
 gempa('gempaterkini').then(
-  compose(render(gempaterkini), join(''), addPadding, takeTwo)
+  compose(render(gempaterkini), join(''), addPadding, takeThree)
 );
 gempa('gempadirasakan').then(
-  compose(render(gempadirasakan), join(''), addPadding, takeTwo)
+  compose(render(gempadirasakan), join(''), addPadding, takeThree)
 );
 gempa('lasttsunami').then(compose(render(lasttsunami), addPadding));
