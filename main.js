@@ -19,25 +19,20 @@ const trace = (label) => (value) => {
 const render = (id) => (html) => (id.innerHTML += html);
 const take = (num) => (arr) => arr.slice(0, num);
 const join = (str) => (arr) => arr.join(str);
-const addPadding = (arr) =>
-  arr.map((i) => `<div style="padding-bottom:20px">${i}</div>`);
 const takeThree = take(3);
-const afterTakeTwo = trace('after take 2');
-const beforeTakeTwo = trace('before take 2');
 
 const BASEURL = 'https://gempa.yapie.me/api/gempa';
 
 async function getData(path) {
   try {
     const { data } = await axios.get(`${BASEURL}/${path}`);
-    // console.log(data);
     return data;
   } catch (e) {
     console.error(e);
   }
 }
 
-function handleValueArray(value) {
+function handleValue(value) {
   if (Array.isArray(value)) {
     return value.map((i) => `<div> ${i} </div>`).join('');
   } else {
@@ -53,16 +48,11 @@ const objToHtmlString = (obj) =>
         ${key}
       </div>
       <div>
-        ${handleValueArray(value)} 
+        ${handleValue(value)} 
       </div>
     </div>
     `
   );
-
-const toObject = (acc, [key, value]) => {
-  acc[key] = value;
-  acc;
-};
 
 const setWilayah = (obj) => {
   const values = Object.entries(obj).reduce((acc, [key, value]) => {
@@ -99,13 +89,12 @@ const setKeys = (obj) => {
   }, {});
 };
 
+const addPadding = (arr) =>
+  arr.map((i) => `<div style="padding-bottom:20px">${i}</div>`);
+
 async function gempa(path) {
   const { data } = await getData(path);
-
-  return data
-    .map(setKeys)
-    .map(setWilayah)
-    .map(compose(join(''), objToHtmlString));
+  return data.map(compose(join(''), objToHtmlString, setWilayah, setKeys));
 }
 
 gempa('autogempa').then(compose(render(autogempa), addPadding));
