@@ -4,6 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="manifest" href="manifest.json" />
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
 
     <title>Hello There!</title>
     <link
@@ -18,6 +25,18 @@
         <h1 class="title has-text-warning has-text-centered">
           Hello There
         </h1>
+        <div>
+          <h2 class="has-text-warning has-text-centered">
+            Status Notification : <span id="status_notif"></span>
+          </h2>
+        </div>
+
+        <div class="columns is-centered">
+          <button id="notifBtn" class="button">
+            Notif
+          </button>
+        </div>
+
         <div class="columns is-centered is-multiline">
           <div class="column is-three-fifths">
             <div class="card has-background-warning">
@@ -71,15 +90,15 @@
     </section>
 
     <script>
-      navigator.serviceWorker
-        .register('sw.js', { scope: '.' })
-        .then(function (registration) {
-          console.log('Service worker registered successfully');
-        })
-        .catch(function (e) {
-          console.error('Error during service worker registration:', e);
-        });
+      Notification.requestPermission(function (status) {
+        const status_notif = document.getElementById('status_notif');
+        status_notif.innerHTML += `<span>${status}</span>`;
+        console.log('Notification permission status:', status);
+      });
     </script>
+
     <script src="main.js"></script>
+    <script src="firebase.js"></script>
+    <script src="notif.js"></script>
   </body>
 </html>
