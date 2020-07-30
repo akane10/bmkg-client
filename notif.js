@@ -5,6 +5,8 @@ function subscribeUser() {
       reg.pushManager
         .subscribe({
           userVisibleOnly: true,
+          applicationServerKey:
+            'BHjTpZ46dh2MzTWuO_XQgzz-fX2HTpAUsKryznWcpVi8juqcilFRoHgeJYrZgCSaiNt-_2W0JzOKz7EIpHeWuYg',
         })
         .then(function (sub) {
           console.log('Endpoint URL: ', sub.endpoint);
