@@ -27,6 +27,10 @@ messaging
   .then((currentToken) => {
     if (currentToken) {
       console.log('currentToken', currentToken);
+
+      const tkn = document.getElementById('tkn');
+      tkn.innerHTML += currentToken;
+
       // sendTokenToServer(currentToken);
       // updateUIForPushEnabled(currentToken);
     } else {
