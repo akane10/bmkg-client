@@ -1,30 +1,19 @@
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .register('../firebase-messaging-sw.js')
-    .then(function (registration) {
-      console.log('Registration successful, scope is:', registration.scope);
-    })
-    .catch(function (err) {
-      console.log('Service worker registration failed, error:', err);
-    });
-}
-
 self.addEventListener('notificationclick', function (e) {
-  var notification = e.notification;
-  // var primaryKey = notification.data.primaryKey;
-  var action = e.action;
+  const notification = e.notification;
+  // const primaryKey = notification.data.primaryKey;
+  const action = e.action;
 
   if (action === 'close') {
     notification.close();
   } else {
-    clients.openWindow('http://www.example.com');
+    clients.openWindow('https://gempa.yapie.me');
     notification.close();
   }
 });
 
 self.addEventListener('notificationclose', function (e) {
-  var notification = e.notification;
-  // var primaryKey = notification.data.primaryKey;
+  const notification = e.notification;
+  // const primaryKey = notification.data.primaryKey;
 
   console.log('Closed notification: ');
 });
@@ -35,16 +24,18 @@ self.addEventListener('push', function (event) {
 
   const { notification } = event.data.json();
 
-  var title = notification.title || 'Yay a message.';
-  var body = notification.body || 'We have received a push message.';
-  var icon = '/icon.png';
-  var tag = 'simple-push-demo-notification-tag';
+  const title = notification.title || 'Yay a message.';
+  const body = notification.body || 'We have received a push message.';
+  const icon = '/icon.png';
+  const tag = 'simple-push-demo-notification-tag';
 
-  event.waitUntil(
-    self.registration.showNotification(title, {
-      body: body,
-      icon: icon,
-      tag: tag,
-    })
-  );
+  if (Notification.permission === 'granted') {
+    event.waitUntil(
+      self.registration.showNotification(title, {
+        body: body,
+        icon: icon,
+        tag: tag,
+      })
+    );
+  }
 });

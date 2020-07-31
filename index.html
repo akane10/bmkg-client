@@ -25,23 +25,19 @@
         <h1 class="title has-text-warning has-text-centered">
           Hello There
         </h1>
-        <div>
-          <h2 class="has-text-warning has-text-centered">
-            Status Notification : <span id="status_notif"></span>
-          </h2>
-        </div>
-
         <div class="columns is-centered">
-          <button id="notifBtn" class="button">
-            Notif
-          </button>
-        </div>
+          <div class="buttons">
+            <!-- <button id="notifBtn" class="button">
+              Enable Notification
+            </button> -->
 
+            <button id="perBtn" class="button">
+              NotifyMe
+            </button>
+          </div>
+        </div>
         <div>
-          <h2 class="has-text-warning has-text-centered" style="width: 10px;">
-            tkn:
-            <div id="tkn"></div>
-          </h2>
+          <p id="msgBtn" class="has-text-centered"></p>
         </div>
 
         <div class="columns is-centered is-multiline">
@@ -96,16 +92,10 @@
       </div>
     </section>
 
-    <script>
-      Notification.requestPermission(function (status) {
-        const status_notif = document.getElementById('status_notif');
-        status_notif.innerHTML += `<span>${status}</span>`;
-        console.log('Notification permission status:', status);
-      });
-    </script>
+    <script></script>
 
     <script src="main.js"></script>
     <script src="firebase.js"></script>
-    <script src="notif.js"></script>
+    <!-- <script src="notif.js"></script> -->
   </body>
 </html>
