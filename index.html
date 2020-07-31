@@ -25,16 +25,9 @@
         <h1 class="title has-text-warning has-text-centered">
           Hello There
         </h1>
-        <div class="columns is-centered">
-          <!-- <div class="buttons"> -->
-          <!-- <button id="notifBtn" class="button">
-              Enable Notification
-            </button> -->
 
-          <!-- <button id="perBtn" class="button has-text-centered">
-            NotifyMe
-          </button> -->
-          <!-- </div> -->
+        <div style="padding-bottom: 20px;">
+          <p id="status_per" class="has-text-centered has-text-warning"></p>
         </div>
         <div>
           <p id="msgBtn" class="has-text-centered"></p>
@@ -92,7 +85,11 @@
       </div>
     </section>
 
-    <script></script>
+    <script>
+      const status_per = document.getElementById('status_per');
+
+      status_per.innerText = `Permission Notification : ${Notification.permission}`;
+    </script>
 
     <script src="main.js"></script>
     <script src="firebase.js"></script>
