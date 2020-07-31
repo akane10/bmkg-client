@@ -10,6 +10,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
+const db = firebase.firestore();
 
 const permissionStatus = Notification.permission;
 
@@ -25,11 +26,40 @@ async function getToken() {
     const currentToken = await messaging.getToken();
 
     if (currentToken) {
-      console.log('currentToken', currentToken);
-      return currentToken;
-
-      // sendTokenToServer(currentToken);
-      // updateUIForPushEnabled(currentToken);
+      db.collection('tokens')
+        .where('token', '==', currentToken)
+        .get()
+        .then((querySnapshot) => {
+          if (querySnapshot.empty) {
+            db.collection('tokens')
+              .add({
+                token: currentToken,
+              })
+              .then((docRef) => {
+                console.log(docRef);
+              })
+              .catch((e) => console.log(e));
+          } else {
+            querySnapshot.forEach((doc) => {
+              if (!doc.exists) {
+                db.collection('tokens')
+                  .add({
+                    token: currentToken,
+                  })
+                  .then((docRef) => {
+                    console.log(docRef);
+                  })
+                  .catch((e) => console.log(e));
+              }
+              // doc.data() is never undefined for query doc snapshots
+              console.log(doc.id, ' => ', doc.data());
+            });
+          }
+          console.log('here', querySnapshot.empty);
+        })
+        .catch((error) => {
+          console.log('Error getting documents: ', error);
+        });
     } else {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
@@ -37,6 +67,8 @@ async function getToken() {
       }
     }
   } catch (e) {
-    console.error('An error occurred while retrieving token. ', err);
+    console.error('An error occurred while retrieving token. ', e);
   }
 }
+
+getToken();
