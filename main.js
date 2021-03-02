@@ -1,7 +1,6 @@
 // autogempa.xml
 // gempaterkini.xml
 // gempadirasakan.xml
-// lasttsunami.xml
 
 navigator.serviceWorker
   .register('sw.js', { scope: '.' })
@@ -15,7 +14,6 @@ navigator.serviceWorker
 const autogempa = document.getElementById('autogempa');
 const gempaterkini = document.getElementById('gempaterkini');
 const gempadirasakan = document.getElementById('gempadirasakan');
-const lasttsunami = document.getElementById('lasttsunami');
 
 const compose = (...functions) => (args) =>
   functions.reduceRight((arg, fn) => fn(arg), args);
@@ -122,4 +120,3 @@ gempa('gempaterkini').then(
 gempa('gempadirasakan').then(
   compose(render(gempadirasakan), join(''), addPadding, takeThree)
 );
-gempa('lasttsunami').then(compose(render(lasttsunami), addPadding));
