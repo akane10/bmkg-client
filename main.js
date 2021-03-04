@@ -3,17 +3,17 @@
 // gempadirasakan.xml
 
 navigator.serviceWorker
-  .register('sw.js', { scope: '.' })
-  .then(function (reg) {
-    console.log('Service worker registered successfully');
+  .register("sw.js", { scope: "." })
+  .then(function(reg) {
+    console.log("Service worker registered successfully");
   })
-  .catch(function (e) {
-    console.error('Error during service worker registration:', e);
+  .catch(function(e) {
+    console.error("Error during service worker registration:", e);
   });
 
-const autogempa = document.getElementById('autogempa');
-const gempaterkini = document.getElementById('gempaterkini');
-const gempadirasakan = document.getElementById('gempadirasakan');
+const autogempa = document.getElementById("autogempa");
+const gempaterkini = document.getElementById("gempaterkini");
+const gempadirasakan = document.getElementById("gempadirasakan");
 
 const compose = (...functions) => (args) =>
   functions.reduceRight((arg, fn) => fn(arg), args);
@@ -28,7 +28,7 @@ const take = (num) => (arr) => arr.slice(0, num);
 const join = (str) => (arr) => arr.join(str);
 const takeThree = take(3);
 
-const BASEURL = 'https://gempa.yapie.me/api/gempa';
+const BASEURL = "https://gempa.yapie.me/api/gempa";
 
 async function getData(path) {
   try {
@@ -41,7 +41,7 @@ async function getData(path) {
 
 function handleValue(value) {
   if (Array.isArray(value)) {
-    return value.map((i) => `<div> ${i} </div>`).join('');
+    return value.map((i) => `<div> ${i} </div>`).join("");
   } else {
     return value;
   }
@@ -63,14 +63,14 @@ const objToHtmlString = (obj) =>
 
 const setWilayah = (obj) => {
   const values = Object.entries(obj).reduce((acc, [key, value]) => {
-    if (key.includes('Wilayah')) {
+    if (key.includes("wilayah")) {
       acc.push(value);
     }
     return acc;
   }, []);
 
   const objWithoutWilayah = Object.entries(obj).reduce((acc, [key, value]) => {
-    if (key.includes('Wilayah')) {
+    if (key.includes("wilayah")) {
       return acc;
     } else {
       acc[key] = value;
@@ -87,18 +87,18 @@ const setWilayah = (obj) => {
 
 const setKeys = (obj) => {
   const keys = [
-    'Tanggal',
-    'Jam',
-    'Magnitude',
-    'Potensi',
-    'Area',
-    'Wilayah',
-    'Keterangan',
-    'Dirasakan',
+    "tanggal",
+    "jam",
+    "magnitude",
+    "potensi",
+    "area",
+    "wilayah",
+    "keterangan",
+    "dirasakan",
   ];
 
   return Object.entries(obj).reduce((acc, [key, value]) => {
-    if (keys.includes(key) || key.includes('Wilayah')) {
+    if (keys.includes(key) || key.includes("wilayah")) {
       acc[key] = value;
     }
     return acc;
@@ -109,14 +109,36 @@ const addPadding = (arr) =>
   arr.map((i) => `<div style="padding-bottom:20px">${i}</div>`);
 
 async function gempa(path) {
-  const { data } = await getData(path);
-  return data.map(compose(join(''), objToHtmlString, setWilayah, setKeys));
+  const data = await getData(path);
+  return data.map(
+    compose(
+      join(""),
+      objToHtmlString,
+      setWilayah,
+      setKeys
+    )
+  );
 }
 
-gempa('autogempa').then(compose(render(autogempa), addPadding));
-gempa('gempaterkini').then(
-  compose(render(gempaterkini), join(''), addPadding, takeThree)
+gempa("autogempa").then(
+  compose(
+    render(autogempa),
+    addPadding
+  )
 );
-gempa('gempadirasakan').then(
-  compose(render(gempadirasakan), join(''), addPadding, takeThree)
+gempa("gempaterkini").then(
+  compose(
+    render(gempaterkini),
+    join(""),
+    addPadding,
+    takeThree
+  )
+);
+gempa("gempadirasakan").then(
+  compose(
+    render(gempadirasakan),
+    join(""),
+    addPadding,
+    takeThree
+  )
 );
