@@ -55,7 +55,7 @@ const objToHtmlString = (obj) =>
         ${key}
       </div>
       <div>
-        ${handleValue(value)} 
+        ${handleValue(value) || "-"} 
       </div>
     </div>
     `
@@ -109,7 +109,7 @@ const addPadding = (arr) =>
   arr.map((i) => `<div style="padding-bottom:20px">${i}</div>`);
 
 async function gempa(path) {
-  const data = await getData(path);
+  const data = await getData(path) || [];
   return data.map(
     compose(
       join(""),
