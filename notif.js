@@ -1,4 +1,5 @@
 let SUB_BTN = document.getElementById("sub");
+const url = "http://localhost:8000/api/gempa/notif";
 
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -13,10 +14,6 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-const vapidPublicKey =
-  "BHkmEVA9XT1gsi-bryQoOrVU1Zi9yzvOw7pX7nXwUUNbZ7WjjFHG1BR0otCvsF1_6V5SoTixFmUwAPwwFG1BqK4";
-const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
-
 (async function registerSW() {
   if ("serviceWorker" in navigator) {
     try {
@@ -27,7 +24,7 @@ const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
       if (sub === null) {
         console.log("Not subscribed to push service!");
       } else {
-        await sendSub();
+        await sendSub(sub);
         SUB_BTN.innerHTML = "Unsubscribe";
       }
     } catch (err) {
@@ -45,30 +42,38 @@ SUB_BTN.addEventListener("click", (e) => {
 });
 
 async function sendSub(sub) {
-  const p256dh = sub.getKey("p256dh");
-  const auth = sub.getKey("auth");
-  const p256dhString = btoa(String.fromCharCode(...new Uint8Array(p256dh)));
-  const authString = btoa(String.fromCharCode(...new Uint8Array(auth)));
+  try {
+    const p256dh = sub.getKey("p256dh");
+    const auth = sub.getKey("auth");
+    const p256dhString = btoa(String.fromCharCode(...new Uint8Array(p256dh)));
+    const authString = btoa(String.fromCharCode(...new Uint8Array(auth)));
 
-  const data = {
-    p256dh: p256dhString,
-    auth: authString,
-    endpoint: sub.endpoint,
-  };
+    const data = {
+      p256dh: p256dhString,
+      auth: authString,
+      endpoint: sub.endpoint,
+    };
 
-  // TODO: send to API
-  console.log("Data Sub: ", data);
+    const { res } = await axios.post(url, JSON.stringify(data));
+    console.log("Data Sub: ", data);
+  } catch (e) {
+    console.log("err sendSub", e.message);
+    throw new Error(e);
+  }
 }
 
 async function subscribeUser() {
   try {
     if ("serviceWorker" in navigator) {
       const reg = await navigator.serviceWorker.ready;
+      const { data } = await axios.get(url);
+      const convertedVapidKey = urlBase64ToUint8Array(data.key);
+      console.log(data.key);
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey,
       });
-      await sendSub();
+      await sendSub(sub);
       SUB_BTN.innerHTML = "Unsubscribed";
     }
   } catch (e) {
