@@ -1,45 +1,92 @@
-function subscribeUser() {
-  console.log('subscribeUser invoked');
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(function (reg) {
-      reg.pushManager
-        .subscribe({
-          userVisibleOnly: true,
-          applicationServerKey:
-            'BHjTpZ46dh2MzTWuO_XQgzz-fX2HTpAUsKryznWcpVi8juqcilFRoHgeJYrZgCSaiNt-_2W0JzOKz7EIpHeWuYg',
-        })
-        .then(function (sub) {
-          console.log('Endpoint URL: ', sub.endpoint);
-        })
-        .catch(function (e) {
-          if (Notification.permission === 'denied') {
-            console.warn('Permission for notifications was denied');
-          } else {
-            console.error('Unable to subscribe to push', e);
-          }
-        });
-    });
+let SUB_BTN = document.getElementById("sub");
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+const vapidPublicKey =
+  "BHkmEVA9XT1gsi-bryQoOrVU1Zi9yzvOw7pX7nXwUUNbZ7WjjFHG1BR0otCvsF1_6V5SoTixFmUwAPwwFG1BqK4";
+const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+
+(async function registerSW() {
+  if ("serviceWorker" in navigator) {
+    try {
+      const reg = await navigator.serviceWorker.register("sw.js");
+      console.log("Service Worker Registered!", reg);
+
+      const sub = await reg.pushManager.getSubscription();
+      if (sub === null) {
+        console.log("Not subscribed to push service!");
+      } else {
+        // We have a subscription, update the database
+        console.log("Subscription object: ", sub);
+
+        const p256dh = sub.getKey("p256dh");
+        const auth = sub.getKey("auth");
+        const p256dhString = btoa(
+          String.fromCharCode(...new Uint8Array(p256dh))
+        );
+        const authString = btoa(String.fromCharCode(...new Uint8Array(auth)));
+
+        console.log("p256dh", p256dhString);
+        console.log("auth", authString);
+        // SUB_BTN.disabled = true;
+        SUB_BTN.innerHTML = "Unsubscribe";
+      }
+    } catch (err) {
+      console.error("Opppsss", err);
+    }
+  }
+})();
+
+SUB_BTN.addEventListener("click", (e) => {
+  if (e.target.textContent == "Subscribe") {
+    subscribeUser();
+  } else {
+    unsubscribeUser();
+  }
+});
+
+async function subscribeUser() {
+  try {
+    if ("serviceWorker" in navigator) {
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedVapidKey,
+      });
+      console.log("Endpoint URL: ", sub.endpoint);
+      SUB_BTN.innerHTML = "Unsubscribed";
+    }
+  } catch (e) {
+    if (Notification.permission === "denied") {
+      console.warn(
+        "Unable to subscribe. Please change permission for notification"
+      );
+    } else {
+      console.error("Unable to subscribe to push", e);
+    }
   }
 }
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .register('sw.js')
-    .then(function (reg) {
-      console.log('Service Worker Registered!', reg);
-
-      reg.pushManager.getSubscription().then(function (sub) {
-        if (sub === null) {
-          // Update UI to ask user to register for Push
-          console.log('Not subscribed to push service!');
-          subscribeUser();
-        } else {
-          // We have a subscription, update the database
-          console.log('Subscription object: ', sub);
-        }
-      });
-    })
-    .catch(function (err) {
-      console.log('Service Worker registration failed: ', err);
-    });
+async function unsubscribeUser() {
+  try {
+    if ("serviceWorker" in navigator) {
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.getSubscription();
+      sub.unsubscribe();
+      SUB_BTN.innerHTML = "Subscribe";
+    }
+  } catch (e) {
+    console.error("Unable to unsubscribe to push", e);
+  }
 }

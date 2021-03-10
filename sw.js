@@ -1,32 +1,32 @@
-var CACHE_NAME = 'pwgen-cache-v1';
+var CACHE_NAME = "pwgen-cache-v1";
 var urlsToCache = [
-  './?v3',
-  'icon.png',
-  'index.html',
-  'main.js',
-  'manifest.json',
-  'sw.js',
-  'https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css',
-  'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js',
+  "./?v3",
+  "icon.png",
+  "index.html",
+  "main.js",
+  "manifest.json",
+  "sw.js",
+  "https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css",
+  "https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js",
 ];
-console.log('loading sw');
+console.log("loading sw");
 
-self.addEventListener('install', function (event) {
+self.addEventListener("install", function(event) {
   // Perform install steps
-  console.log('installing sw');
+  console.log("installing sw");
   event.waitUntil(
-    caches.open(CACHE_NAME).then(function (cache) {
-      console.log('Opened cache');
+    caches.open(CACHE_NAME).then(function(cache) {
+      console.log("Opened cache");
       var x = cache.addAll(urlsToCache);
-      console.log('cache added');
+      console.log("cache added");
       return x;
     })
   );
 });
 
-self.addEventListener('fetch', function (event) {
+self.addEventListener("fetch", function(event) {
   event.respondWith(
-    caches.match(event.request).then(function (response) {
+    caches.match(event.request).then(function(response) {
       // Cache hit - return response
       if (response) {
         return response;
@@ -34,4 +34,19 @@ self.addEventListener('fetch', function (event) {
       return fetch(event.request);
     })
   );
+});
+
+self.addEventListener("push", function(e) {
+  const { data } = e;
+
+  const options = {
+    body: data ? data.text() : "Gempa!!!",
+    // icon: "images/notification-flat.png",
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1,
+    },
+  };
+  e.waitUntil(self.registration.showNotification("Push Notification", options));
 });

@@ -2,14 +2,14 @@
 // gempaterkini.xml
 // gempadirasakan.xml
 
-navigator.serviceWorker
-  .register("sw.js", { scope: "." })
-  .then(function(reg) {
-    console.log("Service worker registered successfully");
-  })
-  .catch(function(e) {
-    console.error("Error during service worker registration:", e);
-  });
+// navigator.serviceWorker
+// .register("sw.js", { scope: "." })
+// .then(function(reg) {
+// console.log("Service worker registered successfully");
+// })
+// .catch(function(e) {
+// console.error("Error during service worker registration:", e);
+// });
 
 const autogempa = document.getElementById("autogempa");
 const gempaterkini = document.getElementById("gempaterkini");
@@ -109,7 +109,7 @@ const addPadding = (arr) =>
   arr.map((i) => `<div style="padding-bottom:20px">${i}</div>`);
 
 async function gempa(path) {
-  const data = await getData(path) || [];
+  const data = (await getData(path)) || [];
   return data.map(
     compose(
       join(""),

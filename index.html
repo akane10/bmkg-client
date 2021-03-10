@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="manifest" href="manifest.json" />
     <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script> -->
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script
-      defer
-      src="https://www.gstatic.com/firebasejs/7.17.1/firebase-messaging.js"
-    ></script>
-    <script
-      defer
-      src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"
-    ></script>
-    <script
-      defer
-      src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"
-    ></script>
+    <!-- <script -->
+    <!-- defer -->
+    <!-- src="https://www.gstatic.com/firebasejs/7.17.1/firebase-messaging.js" -->
+    <!-- ></script> -->
+    <!-- <script -->
+    <!-- defer -->
+    <!-- src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js" -->
+    <!-- ></script> -->
+    <!-- <script -->
+    <!-- defer -->
+    <!-- src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js" -->
+    <!-- ></script> -->
 
     <title>Hello There!</title>
     <link
@@ -36,6 +36,10 @@
           Hello There
         </h1>
 
+        <div class="has-text-centered">
+          <button id="sub" class="button is-primary">Subscribe</button>
+        </div>
+
         <div style="padding-bottom: 20px;">
           <p id="status_per" class="has-text-centered has-text-warning"></p>
         </div>
@@ -48,7 +52,7 @@
             <div class="card has-background-warning">
               <div class="card-content">
                 <p class="title has-text-centered">
-                  Gempabumi Terbaru	
+                  Gempabumi Terbaru
                 </p>
               </div>
 
@@ -79,18 +83,18 @@
               <div id="gempadirasakan"></div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
 
     <script>
-      const status_per = document.getElementById('status_per');
+      const status_per = document.getElementById("status_per");
 
       status_per.innerText = `Permission Notification : ${Notification.permission}`;
     </script>
 
     <script src="main.js"></script>
-    <script defer src="firebase.js"></script>
+    <script src="notif.js"></script>
+    <!-- <script defer src="firebase.js"></script> -->
   </body>
 </html>
