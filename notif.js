@@ -27,19 +27,8 @@ const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
       if (sub === null) {
         console.log("Not subscribed to push service!");
       } else {
-        // We have a subscription, update the database
-        console.log("Subscription object: ", sub);
-
-        const p256dh = sub.getKey("p256dh");
-        const auth = sub.getKey("auth");
-        const p256dhString = btoa(
-          String.fromCharCode(...new Uint8Array(p256dh))
-        );
-        const authString = btoa(String.fromCharCode(...new Uint8Array(auth)));
-
-        console.log("p256dh", p256dhString);
-        console.log("auth", authString);
-        // SUB_BTN.disabled = true;
+        // TODO: We have a subscription, update the database
+        await sendSub();
         SUB_BTN.innerHTML = "Unsubscribe";
       }
     } catch (err) {
@@ -56,6 +45,22 @@ SUB_BTN.addEventListener("click", (e) => {
   }
 });
 
+async function sendSub(sub) {
+  const p256dh = sub.getKey("p256dh");
+  const auth = sub.getKey("auth");
+  const p256dhString = btoa(String.fromCharCode(...new Uint8Array(p256dh)));
+  const authString = btoa(String.fromCharCode(...new Uint8Array(auth)));
+
+  const data = {
+    p256dh: p256dhString,
+    auth: authString,
+    endpoint: sub.endpoint,
+  };
+
+  // TODO: send to API
+  console.log("Data Sub: ", data);
+}
+
 async function subscribeUser() {
   try {
     if ("serviceWorker" in navigator) {
@@ -64,7 +69,8 @@ async function subscribeUser() {
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey,
       });
-      console.log("Endpoint URL: ", sub.endpoint);
+      // TODO: Update database
+      await sendSub();
       SUB_BTN.innerHTML = "Unsubscribed";
     }
   } catch (e) {
@@ -82,7 +88,8 @@ async function unsubscribeUser() {
   try {
     if ("serviceWorker" in navigator) {
       const reg = await navigator.serviceWorker.ready;
-      const sub = await reg.pushManager.getSubscription();
+
+      // TODO: Delete database
       sub.unsubscribe();
       SUB_BTN.innerHTML = "Subscribe";
     }
