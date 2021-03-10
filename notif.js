@@ -27,7 +27,6 @@ const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
       if (sub === null) {
         console.log("Not subscribed to push service!");
       } else {
-        // TODO: We have a subscription, update the database
         await sendSub();
         SUB_BTN.innerHTML = "Unsubscribe";
       }
@@ -69,7 +68,6 @@ async function subscribeUser() {
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey,
       });
-      // TODO: Update database
       await sendSub();
       SUB_BTN.innerHTML = "Unsubscribed";
     }
