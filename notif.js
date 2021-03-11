@@ -3,8 +3,8 @@ let MODAL = document.getElementsByClassName("modal")[0];
 let MODAL_TITLE = document.getElementById("modal_title");
 let MODAL_MSG = document.getElementById("modal_msg");
 let MODAL_DELETE_BTN = document.getElementById("modal_delete_btn");
-// const url = "http://localhost:8000/api/gempa";
-const url = "https://gempa.yapie.me/api/gempa";
+const url = "http://localhost:8000/api/gempa";
+// const url = "https://gempa.yapie.me/api/gempa";
 
 MODAL_DELETE_BTN.addEventListener("click", closeModal);
 
@@ -132,13 +132,12 @@ async function unsubscribeUser() {
       const auth = sub.getKey("auth");
       const authString = btoa(String.fromCharCode(...new Uint8Array(auth)));
       sub.unsubscribe();
-      await axios({
-        method: "DELETE",
-        url: `${url}/notif/${authString}`,
-      }).catch((e) => {
-        console.log("err when send to api", e.response || e);
-        // showModal(false, "error when sending to api.\n" + (e.response || e));
-      });
+      await axios
+        .delete(`${url}/notif`, { data: { auth: authString } })
+        .catch((e) => {
+          console.log("err when send to api", e.response || e);
+          // showModal(false, "error when sending to api.\n" + (e.response || e));
+        });
       SUB_BTN.innerHTML = "Subscribe";
       showModal(true, "Success to unsubscribe");
     }
