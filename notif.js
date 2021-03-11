@@ -128,10 +128,11 @@ async function unsubscribeUser() {
 
       const sub = await reg.pushManager.getSubscription();
       const auth = sub.getKey("auth");
+      const authString = btoa(String.fromCharCode(...new Uint8Array(auth)));
       sub.unsubscribe();
       await axios({
         method: "DELETE",
-        url: `${url}/notif/${auth}`,
+        url: `${url}/notif/${authString}`,
       }).catch((e) => {
         console.log("err when send to api", e.response || e);
         // showModal(false, "error when sending to api.\n" + (e.response || e));
