@@ -8,6 +8,7 @@ const url = "http://localhost:8000/api/gempa";
 MODAL_DELETE_BTN.addEventListener("click", closeModal);
 
 function showModal(suc, msg) {
+  closeModal();
   if (suc) {
     MODAL_TITLE.classList.add("has-text-success");
     MODAL_TITLE.innerHTML = "SUCCESS";
@@ -135,7 +136,7 @@ async function unsubscribeUser() {
         },
       }).catch((e) => {
         console.log("err when send to api", e.response || e);
-        showModal(false, "error when sending to api.\n" + (e.response || e));
+        // showModal(false, "error when sending to api.\n" + (e.response || e));
       });
       SUB_BTN.innerHTML = "Subscribe";
       showModal(true, "Success to unsubscribe");
