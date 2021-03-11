@@ -20,6 +20,7 @@ function showModal(suc, msg) {
     MODAL_MSG.innerText = msg;
   }
   MODAL.classList.add("is-active");
+  SUB_BTN.classList.remove("is-loading");
 }
 
 function closeModal() {
@@ -62,6 +63,7 @@ function urlBase64ToUint8Array(base64String) {
 })();
 
 SUB_BTN.addEventListener("click", (e) => {
+  SUB_BTN.classList.add("is-loading");
   if (e.target.textContent == "Subscribe") {
     subscribeUser();
   } else {
