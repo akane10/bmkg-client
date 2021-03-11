@@ -3,8 +3,8 @@ let MODAL = document.getElementsByClassName("modal")[0];
 let MODAL_TITLE = document.getElementById("modal_title");
 let MODAL_MSG = document.getElementById("modal_msg");
 let MODAL_DELETE_BTN = document.getElementById("modal_delete_btn");
-const url = "http://localhost:8000/api/gempa";
-// const url = "https://gempa.yapie.me/api/gempa";
+// const url = "http://localhost:8000/api/gempa";
+const url = "https://gempa.yapie.me/api/gempa";
 
 MODAL_DELETE_BTN.addEventListener("click", closeModal);
 

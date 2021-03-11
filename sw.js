@@ -43,7 +43,7 @@ self.addEventListener("push", function(e) {
     title: 'Gempa!!!',
     body: data ? data.text() : "Gempa!!!",
     icon: "icon.png",
-    image: "icon.png",
+    // image: "icon.png",
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
