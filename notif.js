@@ -1,5 +1,31 @@
 let SUB_BTN = document.getElementById("sub");
-const url = "http://localhost:8000/api/gempa/notif";
+let MODAL = document.getElementsByClassName("modal")[0];
+let MODAL_TITLE = document.getElementById("modal_title");
+let MODAL_MSG = document.getElementById("modal_msg");
+let MODAL_DELETE_BTN = document.getElementById("modal_delete_btn");
+const url = "http://localhost:8000/api/gempa";
+
+MODAL_DELETE_BTN.addEventListener("click", closeModal);
+
+function showModal(suc, msg) {
+  if (suc) {
+    MODAL_TITLE.classList.add("has-text-success");
+    MODAL_TITLE.innerHTML = "SUCCESS";
+    MODAL_MSG.innerText = msg;
+  } else {
+    MODAL_TITLE.classList.add("has-text-danger");
+    MODAL_TITLE.innerHTML = "ERROR";
+    MODAL_MSG.innerText = msg;
+  }
+  MODAL.classList.add("is-active");
+}
+
+function closeModal() {
+  MODAL.classList.remove("is-active");
+  MODAL_TITLE.classList.remove("has-text-danger");
+  MODAL_TITLE.innerHTML = "";
+  MODAL_MSG.innerHTML = "";
+}
 
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -54,7 +80,7 @@ async function sendSub(sub) {
       endpoint: sub.endpoint,
     };
 
-    const { res } = await axios.post(url, JSON.stringify(data));
+    const { res } = await axios.post(`${url}/notif`, JSON.stringify(data));
     console.log("Data Sub: ", data);
   } catch (e) {
     console.log("err sendSub", e.message);
@@ -66,7 +92,7 @@ async function subscribeUser() {
   try {
     if ("serviceWorker" in navigator) {
       const reg = await navigator.serviceWorker.ready;
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(`${url}/pub_key`);
       const convertedVapidKey = urlBase64ToUint8Array(data.key);
       console.log(data.key);
       const sub = await reg.pushManager.subscribe({
@@ -75,14 +101,20 @@ async function subscribeUser() {
       });
       await sendSub(sub);
       SUB_BTN.innerHTML = "Unsubscribed";
+      showModal(true, "you have been subscribed");
     }
   } catch (e) {
     if (Notification.permission === "denied") {
+      showModal(
+        false,
+        "Unable to subscribe. Please change notification permission"
+      );
       console.warn(
-        "Unable to subscribe. Please change permission for notification"
+        "Unable to subscribe. Please change notification permission"
       );
     } else {
       console.error("Unable to subscribe to push", e);
+      showModal(false, "Unable to subscribe to push.\n" + (e.response || e));
     }
   }
 }
@@ -92,11 +124,24 @@ async function unsubscribeUser() {
     if ("serviceWorker" in navigator) {
       const reg = await navigator.serviceWorker.ready;
 
-      // TODO: Delete database
+      const sub = await reg.pushManager.getSubscription();
+      const auth = sub.getKey("auth");
       sub.unsubscribe();
+      await axios({
+        method: "DELETE",
+        url: `${url}/notif`,
+        data: {
+          auth,
+        },
+      }).catch((e) => {
+        console.log("err when send to api", e.response || e);
+        showModal(false, "error when sending to api.\n" + (e.response || e));
+      });
       SUB_BTN.innerHTML = "Subscribe";
+      showModal(true, "Success to unsubscribe");
     }
   } catch (e) {
     console.error("Unable to unsubscribe to push", e);
+    showModal(false, "Unable to unsubscribe.\n" + (e.response || e));
   }
 }

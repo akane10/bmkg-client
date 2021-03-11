@@ -40,13 +40,15 @@ self.addEventListener("push", function(e) {
   const { data } = e;
 
   const options = {
+    title: 'Gempa!!!',
     body: data ? data.text() : "Gempa!!!",
-    // icon: "images/notification-flat.png",
+    icon: "icon.png",
+    image: "icon.png",
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
       primaryKey: 1,
     },
   };
-  e.waitUntil(self.registration.showNotification("Push Notification", options));
+  e.waitUntil(self.registration.showNotification("Gempa!!!", options));
 });

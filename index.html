@@ -35,6 +35,23 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body class="has-background-dark" style="min-height: 100vh;">
+    <div class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p id="modal_title" class="modal-card-title">Success</p>
+          <button id="modal_delete_btn" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <!-- Content ... -->
+          <p id="modal_msg">You have been subscribed</p>
+        </section>
+        <footer class="modal-card-foot">
+          <!-- <button class="button">Cancel</button> -->
+        </footer>
+      </div>
+    </div>
+
     <section class="section">
       <div class="container">
         <h1 class="title has-text-warning has-text-centered">
