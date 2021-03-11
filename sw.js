@@ -43,12 +43,12 @@ self.addEventListener("push", function(e) {
     title: 'Gempa!!!',
     body: data ? data.text() : "Gempa!!!",
     icon: "icon.png",
-    // image: "icon.png",
+    badge: "icon.png",
     vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1,
-    },
+    // data: {
+      // dateOfArrival: Date.now(),
+      // primaryKey: 1,
+    // },
   };
   e.waitUntil(self.registration.showNotification("Gempa!!!", options));
 });
