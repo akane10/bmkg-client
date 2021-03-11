@@ -82,7 +82,7 @@ async function sendSub(sub) {
     };
 
     const { res } = await axios.post(`${url}/notif`, JSON.stringify(data));
-    console.log("Data Sub: ", data);
+    // console.log("Data Sub: ", data);
   } catch (e) {
     console.log("err sendSub", e.message);
     throw new Error(e);
@@ -95,7 +95,7 @@ async function subscribeUser() {
       const reg = await navigator.serviceWorker.ready;
       const { data } = await axios.get(`${url}/pub_key`);
       const convertedVapidKey = urlBase64ToUint8Array(data.key);
-      console.log(data.key);
+      // console.log(data.key);
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: convertedVapidKey,
