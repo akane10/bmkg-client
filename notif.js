@@ -45,6 +45,8 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 (async function registerSW() {
+  SUB_BTN.classList.add("is-loading");
+  SUB_BTN.disabled = true;
   if ("serviceWorker" in navigator) {
     try {
       const reg = await navigator.serviceWorker.register("sw.js");
@@ -61,6 +63,8 @@ function urlBase64ToUint8Array(base64String) {
       console.error("Opppsss", err);
     }
   }
+  SUB_BTN.classList.remove("is-loading");
+  SUB_BTN.disabled = false;
 })();
 
 SUB_BTN.addEventListener("click", (e) => {
