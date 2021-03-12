@@ -21,6 +21,7 @@ function showModal(suc, msg) {
   }
   MODAL.classList.add("is-active");
   SUB_BTN.classList.remove("is-loading");
+  SUB_BTN.disabled = false;
 }
 
 function closeModal() {
@@ -64,6 +65,7 @@ function urlBase64ToUint8Array(base64String) {
 
 SUB_BTN.addEventListener("click", (e) => {
   SUB_BTN.classList.add("is-loading");
+  SUB_BTN.disabled = true;
   if (e.target.textContent == "Subscribe") {
     subscribeUser();
   } else {
@@ -105,7 +107,10 @@ async function subscribeUser() {
       });
       await sendSub(sub);
       SUB_BTN.innerHTML = "Unsubscribed";
-      showModal(true, "you have been subscribed");
+      showModal(
+        true,
+        "Successfully subscribed. Try to resubscribe if you dont get any notifications"
+      );
     }
   } catch (e) {
     if (Notification.permission === "denied") {

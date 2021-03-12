@@ -44,7 +44,7 @@ self.addEventListener("push", function(e) {
     body: data ? data.text() : "Gempa!!!",
     icon: "icon.png",
     badge: "icon.png",
-    vibrate: [100, 50, 100],
+    vibrate: [100, 50, 100, 50, 100],
     // data: {
       // dateOfArrival: Date.now(),
       // primaryKey: 1,
