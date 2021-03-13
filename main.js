@@ -2,15 +2,6 @@
 // gempaterkini.xml
 // gempadirasakan.xml
 
-// navigator.serviceWorker
-// .register("sw.js", { scope: "." })
-// .then(function(reg) {
-// console.log("Service worker registered successfully");
-// })
-// .catch(function(e) {
-// console.error("Error during service worker registration:", e);
-// });
-
 const autogempa = document.getElementById("autogempa");
 const gempaterkini = document.getElementById("gempaterkini");
 const gempadirasakan = document.getElementById("gempadirasakan");

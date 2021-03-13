@@ -9,24 +9,6 @@
       integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
       crossorigin="anonymous"
     ></script>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script> -->
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-    <!-- <script -->
-    <!-- defer -->
-    <!-- src="https://www.gstatic.com/firebasejs/7.17.1/firebase-messaging.js" -->
-    <!-- ></script> -->
-    <!-- <script -->
-    <!-- defer -->
-    <!-- src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js" -->
-    <!-- ></script> -->
-    <!-- <script -->
-    <!-- defer -->
-    <!-- src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js" -->
-    <!-- ></script> -->
-
     <title>Hello There!</title>
     <link
       rel="stylesheet"
@@ -40,7 +22,11 @@
       <div class="modal-card">
         <header class="modal-card-head">
           <p id="modal_title" class="modal-card-title">Success</p>
-          <button id="modal_delete_btn" class="delete" aria-label="close"></button>
+          <button
+            id="modal_delete_btn"
+            class="delete"
+            aria-label="close"
+          ></button>
         </header>
         <section class="modal-card-body">
           <!-- Content ... -->
@@ -69,40 +55,42 @@
           <p id="msgBtn" class="has-text-centered"></p>
         </div>
 
-        <div class="columns is-centered is-multiline">
-          <div class="column is-three-fifths">
-            <div class="card has-background-warning">
-              <div class="card-content">
-                <p class="title has-text-centered">
-                  Gempabumi Terbaru
-                </p>
-              </div>
+        <div>
+          <div class="columns is-centered is-multiline">
+            <div class="column is-three-fifths">
+              <div class="card box has-background-warning">
+                <div class="card-content">
+                  <p class="title has-text-centered">
+                    Gempabumi Terbaru
+                  </p>
+                </div>
 
-              <div id="autogempa"></div>
+                <div id="autogempa"></div>
+              </div>
             </div>
-          </div>
 
-          <div class="column is-three-fifths">
-            <div class="card has-background-warning">
-              <div class="card-content">
-                <p class="title has-text-centered">
-                  3 Terkini Gempabumi M5.0+
-                </p>
+            <div class="column is-three-fifths">
+              <div class="card box has-background-warning">
+                <div class="card-content">
+                  <p class="title has-text-centered">
+                    3 Terkini Gempabumi M5.0+
+                  </p>
+                </div>
+
+                <div id="gempaterkini"></div>
               </div>
-
-              <div id="gempaterkini"></div>
             </div>
-          </div>
 
-          <div class="column is-three-fifths">
-            <div class="card has-background-warning">
-              <div class="card-content">
-                <p class="title has-text-centered">
-                  3 Terkini Gempabumi Dirasakan
-                </p>
+            <div class="column is-three-fifths">
+              <div class="card box has-background-warning">
+                <div class="card-content">
+                  <p class="title has-text-centered">
+                    3 Terkini Gempabumi Dirasakan
+                  </p>
+                </div>
+
+                <div id="gempadirasakan"></div>
               </div>
-
-              <div id="gempadirasakan"></div>
             </div>
           </div>
         </div>
@@ -117,6 +105,5 @@
 
     <script src="main.js"></script>
     <script src="notif.js"></script>
-    <!-- <script defer src="firebase.js"></script> -->
   </body>
 </html>
