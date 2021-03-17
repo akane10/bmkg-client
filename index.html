@@ -17,6 +17,35 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body class="has-background-dark" style="min-height: 100vh;">
+    <div id="modal_pass" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Enter Password</p>
+          <button
+            onclick="closeModalPass()"
+            class="delete"
+            aria-label="close"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <form id="form_pass">
+            <input
+              id="pass"
+              class="input is-primary"
+              type="password"
+              placeholder="******"
+              required
+            />
+          </form>
+        </section>
+        <footer class="modal-card-foot">
+          <button form="form_pass" type="submit" class="button is-success">Submit</button>
+          <button onclick="closeModalPass()" class="button">Cancel</button>
+        </footer>
+      </div>
+    </div>
+
     <div class="modal">
       <div class="modal-background"></div>
       <div class="modal-card">

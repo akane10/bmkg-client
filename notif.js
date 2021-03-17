@@ -3,10 +3,26 @@ let MODAL = document.getElementsByClassName("modal")[0];
 let MODAL_TITLE = document.getElementById("modal_title");
 let MODAL_MSG = document.getElementById("modal_msg");
 let MODAL_DELETE_BTN = document.getElementById("modal_delete_btn");
-// const url = "http://localhost:8000/api/gempa";
-const url = "https://gempa.yapie.me/api/gempa";
+let MODAL_PASS = document.getElementById("modal_pass");
+let FORM_PASS = document.getElementById("form_pass");
+const url = "http://localhost:8000/api/gempa";
+// const url = "https://gempa.yapie.me/api/gempa";
+
+const { localStorage } = window;
 
 MODAL_DELETE_BTN.addEventListener("click", closeModal);
+
+// Submit Form
+FORM_PASS.addEventListener("submit", async (e) => {
+  try {
+    e.preventDefault();
+    const pass = e.target["pass"].value;
+    await getToken(pass);
+    console.log("e", e.target["pass"].value);
+  } catch (e) {
+    console.log(e.status );
+  }
+});
 
 function showModal(suc, msg) {
   closeModal();
@@ -29,6 +45,24 @@ function closeModal() {
   MODAL_TITLE.classList.remove("has-text-danger");
   MODAL_TITLE.innerHTML = "";
   MODAL_MSG.innerHTML = "";
+}
+
+function closeModalPass() {
+  console.log("invoked new");
+  MODAL_PASS.classList.remove("is-active");
+  SUB_BTN.classList.remove("is-loading");
+}
+
+async function getToken(pass) {
+  try {
+    const { res } = await axios.post(
+      `${url}/token`,
+      JSON.stringify({ password: pass })
+    );
+  } catch (e) {
+    console.log(e.response || e);
+    throw e.response
+  }
 }
 
 function urlBase64ToUint8Array(base64String) {
@@ -70,10 +104,16 @@ function urlBase64ToUint8Array(base64String) {
 SUB_BTN.addEventListener("click", (e) => {
   SUB_BTN.classList.add("is-loading");
   SUB_BTN.disabled = true;
-  if (e.target.textContent == "Subscribe") {
-    subscribeUser();
+  const tkn = localStorage.getItem("tkn");
+
+  if (!tkn) {
+    MODAL_PASS.classList.add("is-active");
   } else {
-    unsubscribeUser();
+    if (e.target.textContent == "Subscribe") {
+      subscribeUser();
+    } else {
+      unsubscribeUser();
+    }
   }
 });
 
