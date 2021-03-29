@@ -39,8 +39,25 @@ function handleValue(value) {
 }
 
 const objToHtmlString = (obj) =>
-  Object.entries(obj).map(
-    ([key, value]) => `
+  Object.entries(obj).map(([key, value]) => {
+    if (key === "shakemap") {
+      return `
+    <div class="has-text-centered"> 
+      <div class="title is-size-5" style="margin-bottom:0">
+        ${key}
+      </div>
+      <div>
+        <a href="${handleValue(value)}">
+          <img 
+            width="400"
+            alt="shakemap image" 
+            src="${handleValue(value) || "-"} ">
+        </a>
+      </div>
+    </div>
+    `;
+    } else {
+      return `
     <div class="has-text-centered"> 
       <div class="title is-size-5" style="margin-bottom:0">
         ${key}
@@ -49,8 +66,9 @@ const objToHtmlString = (obj) =>
         ${handleValue(value) || "-"} 
       </div>
     </div>
-    `
-  );
+    `;
+    }
+  });
 
 const setWilayah = (obj) => {
   const values = Object.entries(obj).reduce((acc, [key, value]) => {
@@ -60,8 +78,9 @@ const setWilayah = (obj) => {
     return acc;
   }, []);
 
-  const objWithoutWilayah = Object.entries(obj).reduce((acc, [key, value]) => {
-    if (key.includes("wilayah")) {
+  const result = Object.entries(obj).reduce((acc, [key, value]) => {
+    if (key.includes("wilayah") && values.length > 0) {
+      acc["wilayah"] = values;
       return acc;
     } else {
       acc[key] = value;
@@ -69,15 +88,11 @@ const setWilayah = (obj) => {
     }
   }, {});
 
-  if (values.length > 0) {
-    objWithoutWilayah.Wilayah = values;
-  }
-
-  return { ...objWithoutWilayah };
+  return { ...result };
 };
 
-const setKeys = (obj) => {
-  const keys = [
+const setKeys = (key) => (obj) => {
+  const gempaTerbaruKeys = [
     "tanggal",
     "jam",
     "magnitude",
@@ -86,8 +101,38 @@ const setKeys = (obj) => {
     "wilayah",
     "keterangan",
     "dirasakan",
+    "shakemap",
   ];
 
+  const gempaTerikiniKeys = [
+    "tanggal",
+    "jam",
+    "magnitude",
+    "potensi",
+    "area",
+    "wilayah",
+    "keterangan",
+  ];
+
+  const gempaDirasakanKeys = [
+    "tanggal",
+    "jam",
+    "magnitude",
+    "area",
+    "wilayah",
+    "keterangan",
+    "dirasakan",
+  ];
+
+  let keys = [];
+
+  if (key === "autogempa") {
+    keys = gempaTerbaruKeys;
+  } else if (key === "gempaterkini") {
+    keys = gempaTerikiniKeys;
+  } else {
+    keys = gempaDirasakanKeys;
+  }
   return Object.entries(obj).reduce((acc, [key, value]) => {
     if (keys.includes(key) || key.includes("wilayah")) {
       acc[key] = value;
@@ -106,7 +151,7 @@ async function gempa(path) {
       join(""),
       objToHtmlString,
       setWilayah,
-      setKeys
+      setKeys(path)
     )
   );
 }
