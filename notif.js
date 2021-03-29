@@ -3,6 +3,7 @@ let MODAL = document.getElementsByClassName("modal")[0];
 let MODAL_TITLE = document.getElementById("modal_title");
 let MODAL_MSG = document.getElementById("modal_msg");
 let MODAL_DELETE_BTN = document.getElementById("modal_delete_btn");
+let SMASH = document.getElementById("smash");
 // const url = "http://localhost:8000/api/gempa";
 const url = "https://gempa.yapie.me/api/gempa";
 
@@ -58,6 +59,7 @@ function urlBase64ToUint8Array(base64String) {
       } else {
         await sendSub(sub);
         SUB_BTN.innerHTML = "Unsubscribe";
+        SMASH.style.display = "none";
       }
     } catch (err) {
       console.error("Opppsss", err);
@@ -67,13 +69,15 @@ function urlBase64ToUint8Array(base64String) {
   SUB_BTN.disabled = false;
 })();
 
-SUB_BTN.addEventListener("click", (e) => {
+SUB_BTN.addEventListener("click", async (e) => {
   SUB_BTN.classList.add("is-loading");
   SUB_BTN.disabled = true;
   if (e.target.textContent == "Subscribe") {
-    subscribeUser();
+    await subscribeUser();
+    SMASH.style.display = "none";
   } else {
-    unsubscribeUser();
+    await unsubscribeUser();
+    SMASH.style.display = "block";
   }
 });
 

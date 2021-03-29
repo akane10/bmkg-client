@@ -15,6 +15,11 @@
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+      a:hover {
+        color: #FF69B4;
+      }
+    </style>
   </head>
   <body class="has-background-dark" style="min-height: 100vh;">
     <div class="modal">
@@ -40,19 +45,32 @@
 
     <section class="section">
       <div class="container">
-        <h1 class="title has-text-warning has-text-centered">
-          Hello There
-        </h1>
+        <div>
+          <h1
+            style="margin-bottom:0"
+            class="title has-text-warning has-text-centered"
+          >
+            Hello There
+          </h1>
+
+          <div style="padding-bottom:1.5em" class="has-text-centered">
+            <p class="has-text-warning">
+              Any problem or request, contact me on twitter
+              <a href="https://twitter.com/akane10_">@akane10_</a>
+            </p>
+          </div>
+        </div>
 
         <div class="has-text-centered">
           <button id="sub" class="button is-primary">Subscribe</button>
+            <p id="smash" class="has-text-warning">Smash that subscribe button to get gempa notification</p>
         </div>
 
         <div style="padding-bottom: 20px;">
-          <p id="status_per" class="has-text-centered has-text-warning"></p>
-        </div>
-        <div>
-          <p id="msgBtn" class="has-text-centered"></p>
+          <!-- <p id="status_per" class="has-text-centered has-text-warning"></p> -->
+        <!-- </div> -->
+        <!-- <div> -->
+          <!-- <p id="msgBtn" class="has-text-centered"></p> -->
         </div>
 
         <div>
@@ -97,11 +115,11 @@
       </div>
     </section>
 
-    <script>
-      const status_per = document.getElementById("status_per");
+    <!-- <script> -->
+      <!-- const status_per = document.getElementById("status_per"); -->
 
-      status_per.innerText = `Permission Notification : ${Notification.permission}`;
-    </script>
+      <!-- status_per.innerText = `Permission Notification : ${Notification.permission}`; -->
+    <!-- </script> -->
 
     <script src="main.js"></script>
     <script src="notif.js"></script>
