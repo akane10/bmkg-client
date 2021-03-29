@@ -94,7 +94,7 @@ async function sendSub(sub) {
     // console.log("Data Sub: ", data);
   } catch (e) {
     console.log("err sendSub", e.message);
-    throw new Error(e);
+    throw Error(e);
   }
 }
 
@@ -113,7 +113,7 @@ async function subscribeUser() {
       SUB_BTN.innerHTML = "Unsubscribed";
       showModal(
         true,
-        "Successfully subscribed. Try to resubscribe if you dont get any notifications"
+        "Subscribed! Try to resubscribe if you dont get any notifications"
       );
     }
   } catch (e) {
