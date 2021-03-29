@@ -1,10 +1,17 @@
 // autogempa.xml
 // gempaterkini.xml
 // gempadirasakan.xml
+const BASEURL = "https://gempa.yapie.me/api/gempa";
 
 const autogempa = document.getElementById("autogempa");
 const gempaterkini = document.getElementById("gempaterkini");
 const gempadirasakan = document.getElementById("gempadirasakan");
+
+const gempaTerbaruLoading = document.getElementById("gempa-terbaru-loading");
+const gempaTerkiniLoading = document.getElementById("gempa-terkini-loading");
+const gempaDirasakanLoading = document.getElementById(
+  "gempa-dirasakan-loading"
+);
 
 const compose = (...functions) => (args) =>
   functions.reduceRight((arg, fn) => fn(arg), args);
@@ -18,8 +25,6 @@ const render = (id) => (html) => (id.innerHTML += html);
 const take = (num) => (arr) => arr.slice(0, num);
 const join = (str) => (arr) => arr.join(str);
 const takeThree = take(3);
-
-const BASEURL = "https://gempa.yapie.me/api/gempa";
 
 async function getData(path) {
   try {
@@ -145,8 +150,8 @@ const addPadding = (arr) =>
   arr.map((i) => `<div style="padding-bottom:20px">${i}</div>`);
 
 async function gempa(path) {
-  const data = (await getData(path)) || [];
-  return data.map(
+  const data = await getData(path);
+  const res = data.map(
     compose(
       join(""),
       objToHtmlString,
@@ -154,27 +159,56 @@ async function gempa(path) {
       setKeys(path)
     )
   );
+  return res;
 }
 
-gempa("autogempa").then(
-  compose(
-    render(autogempa),
-    addPadding
-  )
-);
-gempa("gempaterkini").then(
-  compose(
-    render(gempaterkini),
-    join(""),
-    addPadding,
-    takeThree
-  )
-);
-gempa("gempadirasakan").then(
-  compose(
-    render(gempadirasakan),
-    join(""),
-    addPadding,
-    takeThree
-  )
-);
+function removeLoading(id) {
+  id.style.display = "none";
+}
+
+function showError(id) {
+  id.innerHTML = `<p class="has-text-centered has-text-danger">Failed to fetch data</p>`;
+}
+
+gempa("autogempa")
+  .then((res) => {
+    removeLoading(gempaTerbaruLoading);
+    compose(
+      render(autogempa),
+      addPadding
+    )(res);
+  })
+  .catch(() => {
+    removeLoading(gempaTerbaruLoading);
+    showError(autogempa);
+  });
+
+gempa("gempaterkini")
+  .then((res) => {
+    removeLoading(gempaTerkiniLoading);
+    compose(
+      render(gempaterkini),
+      join(""),
+      addPadding,
+      takeThree
+    )(res);
+  })
+  .catch(() => {
+    removeLoading(gempaTerkiniLoading);
+    showError(gempaterkini);
+  });
+
+gempa("gempadirasakan")
+  .then((res) => {
+    removeLoading(gempaDirasakanLoading);
+    compose(
+      render(gempadirasakan),
+      join(""),
+      addPadding,
+      takeThree
+    )(res);
+  })
+  .catch(() => {
+    removeLoading(gempaDirasakanLoading);
+    showError(gempadirasakan);
+  });
