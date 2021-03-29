@@ -3,7 +3,7 @@ let MODAL = document.getElementsByClassName("modal")[0];
 let MODAL_TITLE = document.getElementById("modal_title");
 let MODAL_MSG = document.getElementById("modal_msg");
 let MODAL_DELETE_BTN = document.getElementById("modal_delete_btn");
-let SMASH = document.getElementById("smash");
+// let SMASH = document.getElementById("smash");
 // const url = "http://localhost:8000/api/gempa";
 const url = "https://gempa.yapie.me/api/gempa";
 
@@ -59,7 +59,7 @@ function urlBase64ToUint8Array(base64String) {
       } else {
         await sendSub(sub);
         SUB_BTN.innerHTML = "Unsubscribe";
-        SMASH.style.display = "none";
+        // SMASH.style.display = "none";
       }
     } catch (err) {
       console.error("Opppsss", err);
@@ -113,7 +113,7 @@ async function subscribeUser() {
       });
       await sendSub(sub);
       SUB_BTN.innerHTML = "Unsubscribed";
-      SMASH.style.display = "none";
+      // SMASH.style.display = "none";
       showModal(
         true,
         "Subscribed! Try to resubscribe if you dont get any notifications"
@@ -151,7 +151,7 @@ async function unsubscribeUser() {
           // showModal(false, "error when sending to api.\n" + (e.response || e));
         });
       SUB_BTN.innerHTML = "Subscribe";
-      SMASH.style.display = "block";
+      // SMASH.style.display = "block";
       showModal(true, "Success to unsubscribe");
     }
   } catch (e) {

@@ -63,14 +63,14 @@
 
         <div class="has-text-centered">
           <button id="sub" class="button is-primary">Subscribe</button>
-            <p id="smash" class="has-text-warning">Smash that subscribe button to get gempa notification</p>
+            <!-- <p id="smash" class="has-text-warning">Smash that subscribe button to get gempa notification</p> -->
         </div>
 
         <div style="padding-bottom: 20px;">
-          <!-- <p id="status_per" class="has-text-centered has-text-warning"></p> -->
-        <!-- </div> -->
-        <!-- <div> -->
-          <!-- <p id="msgBtn" class="has-text-centered"></p> -->
+          <p id="status_per" class="has-text-centered has-text-warning"></p>
+        </div>
+        <div>
+          <p id="msgBtn" class="has-text-centered"></p>
         </div>
 
         <div>
@@ -115,11 +115,11 @@
       </div>
     </section>
 
-    <!-- <script> -->
-      <!-- const status_per = document.getElementById("status_per"); -->
+    <script>
+      const status_per = document.getElementById("status_per");
 
-      <!-- status_per.innerText = `Permission Notification : ${Notification.permission}`; -->
-    <!-- </script> -->
+      status_per.innerText = `Permission Notification : ${Notification.permission}`;
+    </script>
 
     <script src="main.js"></script>
     <script src="notif.js"></script>
