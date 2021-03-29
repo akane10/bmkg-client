@@ -69,15 +69,13 @@ function urlBase64ToUint8Array(base64String) {
   SUB_BTN.disabled = false;
 })();
 
-SUB_BTN.addEventListener("click", async (e) => {
+SUB_BTN.addEventListener("click", (e) => {
   SUB_BTN.classList.add("is-loading");
   SUB_BTN.disabled = true;
   if (e.target.textContent == "Subscribe") {
-    await subscribeUser();
-    SMASH.style.display = "none";
+    subscribeUser();
   } else {
-    await unsubscribeUser();
-    SMASH.style.display = "block";
+    unsubscribeUser();
   }
 });
 
@@ -115,6 +113,7 @@ async function subscribeUser() {
       });
       await sendSub(sub);
       SUB_BTN.innerHTML = "Unsubscribed";
+      SMASH.style.display = "none";
       showModal(
         true,
         "Subscribed! Try to resubscribe if you dont get any notifications"
@@ -152,6 +151,7 @@ async function unsubscribeUser() {
           // showModal(false, "error when sending to api.\n" + (e.response || e));
         });
       SUB_BTN.innerHTML = "Subscribe";
+      SMASH.style.display = "block";
       showModal(true, "Success to unsubscribe");
     }
   } catch (e) {
