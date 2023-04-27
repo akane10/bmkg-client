@@ -7,6 +7,13 @@ let MODAL_DELETE_BTN = document.getElementById("modal_delete_btn");
 // const url = "http://localhost:8000/api/gempa";
 const url = "https://gempa.yapie.me/api/gempa";
 
+function show_prompt() {
+  const username = prompt("Please enter username");
+  const password = prompt("Please enter password");
+
+  return { username, password };
+}
+
 MODAL_DELETE_BTN.addEventListener("click", closeModal);
 
 function showModal(suc, msg) {
@@ -57,7 +64,7 @@ function urlBase64ToUint8Array(base64String) {
       if (sub === null) {
         console.log("Not subscribed to push service!");
       } else {
-        await sendSub(sub);
+        // await sendSub(sub);
         SUB_BTN.innerHTML = "Unsubscribe";
         // SMASH.style.display = "none";
       }
@@ -103,8 +110,15 @@ async function sendSub(sub) {
 async function subscribeUser() {
   try {
     if ("serviceWorker" in navigator) {
+      const { username, password } = show_prompt();
+
       const reg = await navigator.serviceWorker.ready;
-      const { data } = await axios.get(`${url}/pub_key`);
+      const { data } = await axios.get(`${url}/notif/pub_key`, {
+        auth: {
+          username,
+          password,
+        },
+      });
       const convertedVapidKey = urlBase64ToUint8Array(data.key);
       // console.log(data.key);
       const sub = await reg.pushManager.subscribe({
@@ -128,6 +142,9 @@ async function subscribeUser() {
       console.warn(
         "Unable to subscribe. Please change notification permission"
       );
+    } else if (e.response.status == 401) {
+      console.error("Unauthorize", e);
+      showModal(false, "Unauthorize");
     } else {
       console.error("Unable to subscribe to push", e);
       showModal(false, "Unable to subscribe to push.\n" + (e.response || e));
@@ -138,6 +155,7 @@ async function subscribeUser() {
 async function unsubscribeUser() {
   try {
     if ("serviceWorker" in navigator) {
+      const { username, password } = show_prompt();
       const reg = await navigator.serviceWorker.ready;
 
       const sub = await reg.pushManager.getSubscription();
@@ -145,7 +163,16 @@ async function unsubscribeUser() {
       const authString = btoa(String.fromCharCode(...new Uint8Array(auth)));
       sub.unsubscribe();
       await axios
-        .delete(`${url}/notif`, { data: { auth: authString } })
+        .delete(
+          `${url}/notif`,
+          { data: { auth: authString } },
+          {
+            auth: {
+              username,
+              password,
+            },
+          }
+        )
         .catch((e) => {
           console.log("err when send to api", e.response || e);
           // showModal(false, "error when sending to api.\n" + (e.response || e));
@@ -155,7 +182,12 @@ async function unsubscribeUser() {
       showModal(true, "Success to unsubscribe");
     }
   } catch (e) {
-    console.error("Unable to unsubscribe to push", e);
-    showModal(false, "Unable to unsubscribe.\n" + (e.response || e));
+    if (e.response.status == 401) {
+      console.error("Unauthorize", e);
+      showModal(false, "Unauthorize");
+    } else {
+      console.error("Unable to unsubscribe to push", e);
+      showModal(false, "Unable to unsubscribe.\n" + (e.response || e));
+    }
   }
 }
