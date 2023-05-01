@@ -11,11 +11,11 @@ var urlsToCache = [
 ];
 console.log("loading sw");
 
-self.addEventListener("install", function(event) {
+self.addEventListener("install", function (event) {
   // Perform install steps
   console.log("installing sw");
   event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
+    caches.open(CACHE_NAME).then(function (cache) {
       console.log("Opened cache");
       var x = cache.addAll(urlsToCache);
       console.log("cache added");
@@ -24,9 +24,9 @@ self.addEventListener("install", function(event) {
   );
 });
 
-self.addEventListener("fetch", function(event) {
+self.addEventListener("fetch", function (event) {
   event.respondWith(
-    caches.match(event.request).then(function(response) {
+    caches.match(event.request).then(function (response) {
       // Cache hit - return response
       if (response) {
         return response;
@@ -36,19 +36,30 @@ self.addEventListener("fetch", function(event) {
   );
 });
 
-self.addEventListener("push", function(e) {
+self.addEventListener("push", function (e) {
   const { data } = e;
 
-  const options = {
-    title: 'Gempa!!!',
-    body: data ? data.text() : "Gempa!!!",
-    icon: "icon.png",
-    badge: "icon.png",
-    vibrate: [100, 50, 100, 50, 100],
-    // data: {
+  try {
+    const json = JSON.parse(data.text())
+
+    // TODO:
+    // find settings local storage
+    // whether to show notif
+
+    const options = {
+      title: "Gempa!!!",
+      body: json.message || "Gempa!!!",
+      icon: "icon.png",
+      badge: "icon.png",
+      vibrate: [100, 50, 100, 50, 100],
+      // data: {
       // dateOfArrival: Date.now(),
       // primaryKey: 1,
-    // },
-  };
-  e.waitUntil(self.registration.showNotification("Gempa!!!", options));
+      // },
+    };
+    e.waitUntil(self.registration.showNotification("Gempa!!!", options));
+  } catch (e) {
+    console.log(e);
+    console.log("data", data);
+  }
 });

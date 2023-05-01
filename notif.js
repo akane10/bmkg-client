@@ -119,6 +119,8 @@ async function subscribeUser() {
           password,
         },
       });
+      if (!data?.key) throw new Error("key doesn't exist");
+
       const convertedVapidKey = urlBase64ToUint8Array(data.key);
       // console.log(data.key);
       const sub = await reg.pushManager.subscribe({
@@ -134,6 +136,7 @@ async function subscribeUser() {
       );
     }
   } catch (e) {
+    console.log("error message", e.message);
     if (Notification.permission === "denied") {
       showModal(
         false,
@@ -142,12 +145,15 @@ async function subscribeUser() {
       console.warn(
         "Unable to subscribe. Please change notification permission"
       );
-    } else if (e.response.status == 401) {
+    } else if (e.response?.status == 401) {
       console.error("Unauthorize", e);
       showModal(false, "Unauthorize");
     } else {
       console.error("Unable to subscribe to push", e);
-      showModal(false, "Unable to subscribe to push.\n" + (e.response || e));
+      showModal(
+        false,
+        "Unable to subscribe to push.\n" + (e.response || e.message || e)
+      );
     }
   }
 }
@@ -182,12 +188,15 @@ async function unsubscribeUser() {
       showModal(true, "Success to unsubscribe");
     }
   } catch (e) {
-    if (e.response.status == 401) {
+    if (e.response?.status == 401) {
       console.error("Unauthorize", e);
       showModal(false, "Unauthorize");
     } else {
       console.error("Unable to unsubscribe to push", e);
-      showModal(false, "Unable to unsubscribe.\n" + (e.response || e));
+      showModal(
+        false,
+        "Unable to unsubscribe.\n" + (e.response || e.message || e)
+      );
     }
   }
 }
